@@ -1,29 +1,33 @@
 package br.ifmg.produto1_2026.resources;
-
+import br.ifmg.produto1_2026.dto.CategoriaDTO;
 import br.ifmg.produto1_2026.entities.Categoria;
+import br.ifmg.produto1_2026.service.CategoriaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/categorias")
 public class CategoriaResource {
 
-    @GetMapping
+    @Autowired
+    private CategoriaService categoriaService;
 
-    public ResponseEntity<List<Categoria>> categoria(){
-        Categoria categoria1 = new Categoria(1L,"Notebook");
-        Categoria categoria2 = new Categoria(2L,"Celular");
-        Categoria categoria3 = new Categoria(3L,"Livros");
-        List<Categoria> categorias = new ArrayList<Categoria>();
-        categorias.add(categoria1);
-        categorias.add(categoria2);
-        categorias.add(categoria3);
+    @GetMapping
+    public ResponseEntity<List<CategoriaDTO>> categorias() {
+        List<CategoriaDTO> categorias = categoriaService.findAll();
         return ResponseEntity.ok().body(categorias);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaDTO> categoria(@PathVariable Long id) {
+
+        CategoriaDTO dto = categoriaService.findById(id);
+
+        return ResponseEntity.ok().body(dto);
+    }
 }
