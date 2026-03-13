@@ -1,7 +1,9 @@
 package br.ifmg.produto1_2026.service;
 import br.ifmg.produto1_2026.dto.CategoriaDTO;
 import br.ifmg.produto1_2026.repositories.CategoriaRepository;
+import br.ifmg.produto1_2026.service.exepition.ErroNoBancoDeDados;
 import br.ifmg.produto1_2026.service.exepition.RegistroNaoEncontrado;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import br.ifmg.produto1_2026.entities.Categoria;
@@ -42,5 +44,30 @@ public class CategoriaService {
         Optional<Categoria> opt = categoriaRepository.findById(id);
         Categoria categoria = opt.orElseThrow(() -> new RegistroNaoEncontrado("Categoria não encontrada."));
         return new CategoriaDTO(categoria);
+    }
+    @Transactional
+    public CategoriaDTO insert(CategoriaDTO dto) {
+
+        Categoria entity = new Categoria();
+        entity.setNome(dto.getNome());
+
+       Categoria nova = categoriaRepository.save(entity);
+       return new CategoriaDTO(entity);
+    }
+
+    @Transactional
+    public  void delete(Long id) {
+
+        if (!categoriaRepository.existsById(id)) {
+            throw new RegistroNaoEncontrado("Categoria não encontrada  ao ser excluida.");
+        }
+
+        try {
+            categoriaRepository.deleteById(id);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new ErroNoBancoDeDados(e.getMessage());
+        }
+        categoriaRepository.deleteById(id);
     }
 }
