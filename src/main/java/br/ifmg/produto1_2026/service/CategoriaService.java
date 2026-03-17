@@ -70,4 +70,16 @@ public class CategoriaService {
         }
         categoriaRepository.deleteById(id);
     }
+
+    public CategoriaDTO update(Long id, CategoriaDTO dto) {
+
+        if (!categoriaRepository.existsById(id)) {
+            throw new RegistroNaoEncontrado("Categoria não encontrada.");
+        }
+            Categoria entity = categoriaRepository.getReferenceById(id);
+        entity.setNome(dto.getNome()); //sobrescrevi o nome antigo
+        entity = categoriaRepository.save(entity);
+        return new CategoriaDTO(entity);
+
+    }
 }

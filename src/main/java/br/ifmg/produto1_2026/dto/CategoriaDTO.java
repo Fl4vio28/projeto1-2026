@@ -6,9 +6,17 @@ public class CategoriaDTO {
     private Long id;
     private String nome;
 
+
+    public CategoriaDTO() {}
+
     public CategoriaDTO(String nome, Long id) {
         this.nome = nome;
         this.id = id;
+    }
+
+    public CategoriaDTO(Categoria categoria) {
+        this.id = categoria.getId();
+        this.nome = categoria.getNome();
     }
 
     public Long getId() {
@@ -26,10 +34,7 @@ public class CategoriaDTO {
     public void setNome(String nome) {
         this.nome = nome;
     }
-    public CategoriaDTO(Categoria categoria) {
-        this.id = categoria.getId();
-        this.nome = categoria.getNome();
-    }
+
 
     @Override
     public String toString() {
