@@ -29,12 +29,6 @@ public class CategoriaResource {
             @RequestParam(value = "sort", defaultValue = "id") String sort
 
     ) {
-        List<CategoriaDTO> categoria = categoriaService.findAll();
-        return ResponseEntity.ok().body(categoria);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<CategoriaDTO>> categorias() {
         List<CategoriaDTO> categorias = categoriaService.findAll();
         return ResponseEntity.ok().body(categorias);
     }
