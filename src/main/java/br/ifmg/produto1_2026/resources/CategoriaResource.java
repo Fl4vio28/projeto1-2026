@@ -1,18 +1,14 @@
 package br.ifmg.produto1_2026.resources;
 import br.ifmg.produto1_2026.dto.CategoriaDTO;
-import br.ifmg.produto1_2026.entities.Categoria;
 import br.ifmg.produto1_2026.service.CategoriaService;
-import br.ifmg.produto1_2026.service.exepition.RegistroNaoEncontrado;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/categorias")
@@ -22,14 +18,19 @@ public class CategoriaResource {
     private CategoriaService categoriaService;
 
     @GetMapping
-    public ResponseEntity<List<CategoriaDTO>> categoria(
-            @RequestParam(value = "page",defaultValue = "0")Integer page,
-            @RequestParam(value = "linesPerPage", defaultValue = "10")Integer linesPerPage,
-            @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-            @RequestParam(value = "sort", defaultValue = "id") String sort
+    public ResponseEntity<Page<CategoriaDTO>> categoria(
+           // @RequestParam(value = "page",defaultValue = "0")Integer page,
+           // @RequestParam(value = "linesPerPage", defaultValue = "10")Integer size,
+           // @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+           // @RequestParam(value = "sort", defaultValue = "id") String sort
+           Pageable pageable
 
     ) {
-        List<CategoriaDTO> categorias = categoriaService.findAll();
+
+ //       PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), sort);
+
+
+        Page<CategoriaDTO> categorias = categoriaService.findAll(pageable);
         return ResponseEntity.ok().body(categorias);
     }
 
