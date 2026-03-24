@@ -1,6 +1,6 @@
 package br.ifmg.produto1_2026.repositories;
 
-import br.ifmg.produto1_2026.entitites.Produto;
+import br.ifmg.produto1_2026.entities.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

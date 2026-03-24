@@ -1,7 +1,4 @@
 package br.ifmg.produto1_2026.resources.exeception;
-
-import br.ifmg.produto1_2026.dto.CategoriaDTO;
-
 import java.time.Instant;
 
 public class StandartError {

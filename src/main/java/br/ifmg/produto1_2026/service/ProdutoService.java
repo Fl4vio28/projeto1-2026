@@ -3,13 +3,14 @@ package br.ifmg.produto1_2026.service;
 import br.ifmg.produto1_2026.dto.ProdutoDTO;
 import br.ifmg.produto1_2026.entities.Produto;
 import br.ifmg.produto1_2026.repositories.ProdutoRepository;
-import br.ifmg.produto1_2026.service.exception.ErroNoBancoDeDados;
-import br.ifmg.produto1_2026.service.exception.RegistroNaoEncontrado;
+import br.ifmg.produto1_2026.service.exepition.ErroNoBancoDeDados;
+import br.ifmg.produto1_2026.service.exepition.RegistroNaoEncontrado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,12 +22,12 @@ import java.util.Optional;
 public class ProdutoService {
 
     @Autowired
-    private ProdutoRepository produtoRepository;
+    private ProdutoRepository repository;
 
-    public Page<ProdutoDTO> findAll(Pageable pageable){
+    public Page<ProdutoDTO> findAll(Pageable PageRequest){
 
         //Lista com os dados do BD
-        Page<Produto> produtos = produtoRepository.findAll(pageable);
+        Page<Produto> produtos = repository.findAll(PageRequest);
 
         return produtos.map(ProdutoDTO::new);
     }
@@ -34,11 +35,11 @@ public class ProdutoService {
     @Transactional(readOnly = true)
     public ProdutoDTO findById(Long id){
 
-        //buscamos no BD a produto. O resultado é um objeto do tipo Optinal
-        Optional<Produto> opt = produtoRepository.findById(id);
+        //buscamos no BD o produto. O resultado é um objeto do tipo Optinal
+        Optional<Produto> opt = repository.findById(id);
 
-        //buscamos a produto dentro do objeto Optional
-        Produto produto = opt.orElseThrow(() -> new RegistroNaoEncontrado("Produto não encontrada"));
+        //buscamos o produto dentro do objeto Optional
+        Produto produto = opt.orElseThrow(() -> new RegistroNaoEncontrado("Produto não encontrado"));
 
         //Convertemos a entidade em DTO
         return new ProdutoDTO(produto);
@@ -46,25 +47,28 @@ public class ProdutoService {
 
 
     @Transactional
-    public ProdutoDTO insert (ProdutoDTO produtoDTO){
+    public ProdutoDTO insert (ProdutoDTO dto){
 
         Produto entity = new Produto();
-        entity.setNome(produtoDTO.getNome());
+        entity.setNome(dto.getNome());
+        entity.setDescricao(dto.getDescricao());
+        entity.setPreco(dto.getPreco());
+        entity.setImgUrl(dto.getImgUrl());
 
-        Produto nova = produtoRepository.save(entity);
-        return new ProdutoDTO(entity);
+        Produto novo = repository.save(entity);
+        return new ProdutoDTO(novo);
     }
 
 
     @Transactional
     public void delete(Long id){
 
-        if(!produtoRepository.existsById(id)){
-            throw new RegistroNaoEncontrado("Produto não encontrado, ao ser excluida");
+        if(!repository.existsById(id)){
+            throw new RegistroNaoEncontrado("Produto não encontrado, ao ser excluido");
         }
 
         try {
-            produtoRepository.deleteById(id);
+            repository.deleteById(id);
         }
 
         catch (DataIntegrityViolationException e){
@@ -75,14 +79,17 @@ public class ProdutoService {
 
     public ProdutoDTO update(Long id, ProdutoDTO dto) {
 
-        if(!produtoRepository.existsById(id)){
-            throw new RegistroNaoEncontrado("Produto não encontrado, para ser alterada");
+        if(!repository.existsById(id)){
+            throw new RegistroNaoEncontrado("Produto não encontrado, para ser alterado");
         }
 
-        Produto entity = produtoRepository.getReferenceById(id);
+        Produto entity = repository.getReferenceById(id);
 
         entity.setNome(dto.getNome());//sobrescrevi o nome antigo pelo nome
-        entity = produtoRepository.save(entity);
+        entity.setDescricao(dto.getDescricao());
+        entity.setPreco(dto.getPreco());
+        entity.setImgUrl(dto.getImgUrl());
+        entity = repository.save(entity);
         return new ProdutoDTO(entity);
 
     }

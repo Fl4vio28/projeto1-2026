@@ -25,18 +25,9 @@ public class ProdutoResource {
 
     @GetMapping
     public ResponseEntity<Page<ProdutoDTO>> produtos(
-            /*
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size,
-            @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-            @RequestParam(value = "sort", defaultValue = "id") String sort
-            */
-
             Pageable pageable
 
     ) {
-
-        //PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), sort);
 
         Page<ProdutoDTO> produtos = produtoService.findAll(pageable);
         return ResponseEntity.ok().body(produtos);
@@ -59,7 +50,7 @@ public class ProdutoResource {
         //criando um link para acessar a produto criada
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(retorno.getId()).toUri();
 
-        //enviando a produto criada
+        //enviando o produto criado
         return ResponseEntity.created(location).body(retorno);
     }
 

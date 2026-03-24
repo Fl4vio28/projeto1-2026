@@ -56,7 +56,6 @@ public class CategoriaService {
         catch (DataIntegrityViolationException e) {
             throw new ErroNoBancoDeDados(e.getMessage());
         }
-        categoriaRepository.deleteById(id);
     }
 
     public CategoriaDTO update(Long id, CategoriaDTO dto) {

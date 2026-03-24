@@ -1,4 +1,4 @@
-package br.ifmg.produto1_2026.entitites;
+package br.ifmg.produto1_2026.entities;
 
 import jakarta.persistence.*;
 
@@ -14,6 +14,7 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
+    @Column(columnDefinition = "TEXT")
     private String descricao;
     private Double preco;
     private String imgUrl;
@@ -79,17 +80,11 @@ public class Produto {
         return criadoEm;
     }
 
-    public void setCriadoEm(Instant criadoEm) {
-        this.criadoEm = criadoEm;
-    }
 
     public Instant getAtualizadoEm() {
         return atualizadoEm;
     }
 
-    public void setAtualizadoEm(Instant atualizadoEm) {
-        this.atualizadoEm = atualizadoEm;
-    }
 
     @PrePersist
     public void prePersist() {this.criadoEm = Instant.now();}

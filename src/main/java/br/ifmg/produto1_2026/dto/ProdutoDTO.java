@@ -1,4 +1,5 @@
 package br.ifmg.produto1_2026.dto;
+import br.ifmg.produto1_2026.entities.Produto;
 
 public class ProdutoDTO {
     private Long id;
@@ -16,7 +17,13 @@ public class ProdutoDTO {
         this.preco = preco;
         this.imgUrl = imgUrl;
     }
-
+    public ProdutoDTO(Produto entity) {
+        this.id = entity.getId();
+        this.nome = entity.getNome();
+        this.descricao = entity.getDescricao();
+        this.preco = entity.getPreco();
+        this.imgUrl = entity.getImgUrl();
+    }
     public Long getId() {
         return id;
     }
