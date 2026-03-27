@@ -3,7 +3,9 @@ package br.ifmg.produto1_2026.entities;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -23,6 +25,10 @@ public class Produto {
     private Instant criadoEm;
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant atualizadoEm;
+
+    @ManyToMany
+    @JoinTable(name = "tb_produto_categoria", joinColumns = @JoinColumn(name = "id_prodto"), inverseJoinColumns = @JoinColumn(name = "id_categoria"))
+    private Set<Categoria> categorias = new HashSet<Categoria>();
 
     public Produto() {}
 
@@ -85,6 +91,13 @@ public class Produto {
         return atualizadoEm;
     }
 
+    public Set<Categoria> getCategorias() {
+        return categorias;
+    }
+
+    public void setCategorias(Set<Categoria> categorias) {
+        this.categorias = categorias;
+    }
 
     @PrePersist
     public void prePersist() {this.criadoEm = Instant.now();}
