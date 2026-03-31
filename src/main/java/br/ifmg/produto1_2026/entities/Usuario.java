@@ -3,7 +3,9 @@ package br.ifmg.produto1_2026.entities;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_usuario")
@@ -21,6 +23,14 @@ public class Usuario {
     private Instant criadoEm;
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant atualizadoEm;
+
+    @ManyToMany
+    @JoinTable(
+            name="tb_usuario_perfil",
+            joinColumns = @JoinColumn(name = "id_usuario"),
+            inverseJoinColumns = @JoinColumn(name = "id_perfil")
+    )
+    private Set<Perfil> perfis = new HashSet<Perfil>();
 
     public Usuario() {
     }
@@ -79,37 +89,50 @@ public class Usuario {
         return criadoEm;
     }
 
-    public void setCriadoEm(Instant criadoEm) {
-        this.criadoEm = criadoEm;
-    }
-
     public Instant getAtualizadoEm() {
         return atualizadoEm;
     }
 
-    public void setAtualizadoEm(Instant atualizadoEm) {
-        this.atualizadoEm = atualizadoEm;
+    public Set<Perfil> getPerfis() {
+        return perfis;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id) && Objects.equals(nome, usuario.nome) && Objects.equals(telefone, usuario.telefone) && Objects.equals(email, usuario.email) && Objects.equals(senha, usuario.senha) && Objects.equals(criadoEm, usuario.criadoEm) && Objects.equals(atualizadoEm, usuario.atualizadoEm);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, nome, telefone, email, senha, criadoEm, atualizadoEm);
+    public void setPerfis(Set<Perfil> perfis) {
+        this.perfis = perfis;
     }
 
     @PrePersist
     public void prePersist() {
         this.criadoEm = Instant.now();
     }
+
     @PreUpdate
     public void preUpdate() {
         this.atualizadoEm = Instant.now();
     }
-}
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                ", criadoEm=" + criadoEm +
+                ", atualizadoEm=" + atualizadoEm +
+                '}';
+    }
+}

@@ -1,5 +1,6 @@
 package br.ifmg.produto1_2026.service;
 
+import br.ifmg.produto1_2026.dto.PerfilDTO;
 import br.ifmg.produto1_2026.dto.UsuarioDTO;
 import br.ifmg.produto1_2026.entities.Usuario;
 import br.ifmg.produto1_2026.repositories.UsuarioRepository;
@@ -54,7 +55,6 @@ public class UsuarioService {
         entity.setTelefone(usuarioDTO.getTelefone());
         entity.setEmail(usuarioDTO.getEmail());
         entity.setSenha(usuarioDTO.getSenha());
-
 
         Usuario novo = repository.save(entity);
         return new UsuarioDTO(novo);

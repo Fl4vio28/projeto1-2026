@@ -1,8 +1,8 @@
-package br.ifmg.produto1_2026.entities;
+package br.ifmg.produto1_2026.dto;
 
+import br.ifmg.produto1_2026.entities.Perfil;
+import br.ifmg.produto1_2026.entities.Usuario;
 import jakarta.persistence.*;
-
-import java.util.Objects;
 
 @Entity
 @Table(name = "tb_perfil")
@@ -18,6 +18,10 @@ public class PerfilDTO { //POJO
     public PerfilDTO(Long id, String nome) {
         this.id = id;
         this.nome = nome;
+    }
+    public PerfilDTO(Perfil perfil) {
+        this.id = perfil.getId();
+        this.nome = perfil.getNome();
     }
 
     public Long getId() {

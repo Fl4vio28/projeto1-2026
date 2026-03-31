@@ -1,7 +1,10 @@
 package br.ifmg.produto1_2026.service;
 
+import br.ifmg.produto1_2026.dto.CategoriaDTO;
 import br.ifmg.produto1_2026.dto.ProdutoDTO;
+import br.ifmg.produto1_2026.entities.Categoria;
 import br.ifmg.produto1_2026.entities.Produto;
+import br.ifmg.produto1_2026.repositories.CategoriaRepository;
 import br.ifmg.produto1_2026.repositories.ProdutoRepository;
 import br.ifmg.produto1_2026.service.exepition.ErroNoBancoDeDados;
 import br.ifmg.produto1_2026.service.exepition.RegistroNaoEncontrado;
@@ -23,6 +26,8 @@ public class ProdutoService {
 
     @Autowired
     private ProdutoRepository repository;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     public Page<ProdutoDTO> findAll(Pageable PageRequest){
 
@@ -50,13 +55,23 @@ public class ProdutoService {
     public ProdutoDTO insert (ProdutoDTO dto){
 
         Produto entity = new Produto();
+        copyDtoToEntity(dto, entity);
+
+        Produto novo = repository.save(entity);
+        return new ProdutoDTO(novo);
+    }
+
+    private void copyDtoToEntity(ProdutoDTO dto, Produto entity) {
         entity.setNome(dto.getNome());
         entity.setDescricao(dto.getDescricao());
         entity.setPreco(dto.getPreco());
         entity.setImgUrl(dto.getImgUrl());
 
-        Produto novo = repository.save(entity);
-        return new ProdutoDTO(novo);
+        for (CategoriaDTO categoriaDTO : dto.getCategoriasDTO()){
+
+            Categoria cat = categoriaRepository.getReferenceById(categoriaDTO.getId());
+            entity.getCategorias().add(cat);
+        }
     }
 
 
@@ -85,12 +100,10 @@ public class ProdutoService {
 
         Produto entity = repository.getReferenceById(id);
 
-        entity.setNome(dto.getNome());//sobrescrevi o nome antigo pelo nome
-        entity.setDescricao(dto.getDescricao());
-        entity.setPreco(dto.getPreco());
-        entity.setImgUrl(dto.getImgUrl());
+        copyDtoToEntity(dto, entity);
         entity = repository.save(entity);
         return new ProdutoDTO(entity);
+
 
     }
 }

@@ -1,20 +1,19 @@
 package br.ifmg.produto1_2026.dto;
 
-import br.ifmg.produto1_2026.entities.Produto;
 import br.ifmg.produto1_2026.entities.Usuario;
-import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class UsuarioDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String telefone;
     private String email;
     private String senha;
-
-    public UsuarioDTO() {
-    }
+    private List<PerfilDTO> perfis = new ArrayList<>();
+    public UsuarioDTO() {}
 
     public UsuarioDTO(Long id, String nome, String telefone, String email, String senha) {
         this.id = id;
@@ -30,8 +29,9 @@ public class UsuarioDTO {
         this.telefone = entity.getTelefone();
         this.email = entity.getEmail();
         this.senha = entity.getSenha();
-    }
 
+        entity.getPerfis().forEach(role -> this.perfis.add(new PerfilDTO(role)));
+    }
     public Long getId() {
         return id;
     }
@@ -71,5 +71,14 @@ public class UsuarioDTO {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-}
 
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+}
