@@ -1,9 +1,11 @@
 package br.ifmg.produto1_2026.util;
 
 import br.ifmg.produto1_2026.entities.Usuario;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 //@Component
+@Qualifier("sms")
 public class NotificacaoSMS implements Notificador {
 
     private boolean caixaAlta;

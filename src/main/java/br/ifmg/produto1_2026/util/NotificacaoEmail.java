@@ -1,8 +1,11 @@
 package br.ifmg.produto1_2026.util;
 
 import br.ifmg.produto1_2026.entities.Usuario;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
 
 //@Component
+@Qualifier("email")
 public class NotificacaoEmail implements Notificador {
 
     private boolean caixaAlta;
