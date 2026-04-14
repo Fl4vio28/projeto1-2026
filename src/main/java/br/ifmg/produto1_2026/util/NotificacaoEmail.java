@@ -9,11 +9,11 @@ import org.springframework.boot.autoconfigure.quartz.QuartzDataSource;
 public class NotificacaoEmail implements Notificador {
 
     private boolean caixaAlta;
-    private String servidorSmpt;
+    private String servidorSmtp;
 
-    public NotificacaoEmail(String servidorSmpt) {
+    public NotificacaoEmail(String servidorSmtp) {
         System.out.println("NotificacaoEmail criado com sucesso!");
-        this.servidorSmpt = servidorSmpt;
+        this.servidorSmtp = servidorSmtp;
     }
 
     public void notificar(Usuario usuario, String mensagem){
@@ -22,7 +22,7 @@ public class NotificacaoEmail implements Notificador {
             mensagem = mensagem.toUpperCase();
         }
 
-        System.out.printf("Notificando %s através do e-mail %s no servidor %s : %s\n", usuario.getNome(),usuario.getEmail(),servidorSmpt,mensagem);
+        System.out.printf("Notificando %s através do e-mail %s no servidor %s : %s\n", usuario.getNome(),usuario.getEmail(),servidorSmtp,mensagem);
     }
 
     public boolean isCaixaAlta() {
@@ -34,10 +34,10 @@ public class NotificacaoEmail implements Notificador {
     }
 
     public String getServidorSmpt() {
-        return servidorSmpt;
+        return servidorSmtp;
     }
 
-    public void setServidorSmpt(String servidorSmpt) {
-        this.servidorSmpt = servidorSmpt;
+    public void setServidorSmpt(String servidorSmtp) {
+        this.servidorSmtp = servidorSmtp;
     }
 }

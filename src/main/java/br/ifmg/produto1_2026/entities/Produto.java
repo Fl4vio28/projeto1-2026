@@ -27,7 +27,7 @@ public class Produto {
     private Instant atualizadoEm;
 
     @ManyToMany
-    @JoinTable(name = "tb_produto_categoria", joinColumns = @JoinColumn(name = "id_prodto"), inverseJoinColumns = @JoinColumn(name = "id_categoria"))
+    @JoinTable(name = "tb_produto_categoria", joinColumns = @JoinColumn(name = "id_produto"), inverseJoinColumns = @JoinColumn(name = "id_categoria"))
     private Set<Categoria> categorias = new HashSet<Categoria>();
 
     public Produto() {}

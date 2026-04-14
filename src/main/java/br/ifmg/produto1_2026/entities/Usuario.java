@@ -14,26 +14,27 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nome;
     private String telefone;
     private String email;
     private String senha;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @Column(name = "criado_em")
     private Instant criadoEm;
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+
+    @Column(name = "atualizado_em")
     private Instant atualizadoEm;
 
     @ManyToMany
     @JoinTable(
-            name="tb_usuario_perfil",
+            name = "tb_usuario_perfil",
             joinColumns = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_perfil")
     )
-    private Set<Perfil> perfis = new HashSet<Perfil>();
+    private Set<Perfil> perfis = new HashSet<>();
 
-    public Usuario() {
-    }
+    public Usuario() {}
 
     public Usuario(Long id, String nome, String telefone, String email, String senha, Instant criadoEm, Instant atualizadoEm) {
         this.id = id;
@@ -43,6 +44,17 @@ public class Usuario {
         this.senha = senha;
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.criadoEm = Instant.now();
+        this.atualizadoEm = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.atualizadoEm = Instant.now();
     }
 
     public Long getId() {
@@ -89,8 +101,16 @@ public class Usuario {
         return criadoEm;
     }
 
+    public void setCriadoEm(Instant criadoEm) {
+        this.criadoEm = criadoEm;
+    }
+
     public Instant getAtualizadoEm() {
         return atualizadoEm;
+    }
+
+    public void setAtualizadoEm(Instant atualizadoEm) {
+        this.atualizadoEm = atualizadoEm;
     }
 
     public Set<Perfil> getPerfis() {
@@ -101,38 +121,16 @@ public class Usuario {
         this.perfis = perfis;
     }
 
-    @PrePersist
-    public void prePersist() {
-        this.criadoEm = Instant.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.atualizadoEm = Instant.now();
-    }
-
     @Override
     public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id);
+        if (this == o) return true;
+        if (!(o instanceof Usuario)) return false;
+        Usuario that = (Usuario) o;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", telefone='" + telefone + '\'' +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", criadoEm=" + criadoEm +
-                ", atualizadoEm=" + atualizadoEm +
-                '}';
+        return Objects.hash(id);
     }
 }

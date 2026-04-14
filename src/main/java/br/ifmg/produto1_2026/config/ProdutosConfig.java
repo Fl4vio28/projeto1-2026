@@ -14,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 
-@Configuration
+//@Configuration
 class ProdutosConfig {
-
+/*
     @Value("${notificador.email.host}")
     private String servidorSMTP;
     @Profile("dev")
@@ -35,6 +35,8 @@ class ProdutosConfig {
         notificacaoSMS.setCaixaAlta(true);
         return notificacaoSMS;
     }
+
+ */
     /*
     @Bean
     public AtivacaoClienteService atividacaoClienteService(Notificador notificador){
