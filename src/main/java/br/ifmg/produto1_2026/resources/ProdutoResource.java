@@ -8,15 +8,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/produto")
-@Tag(name = "Produtos", description = "Gerenciamento de produtos")
+@Tag(name = "Produtos", description = "Essa API é responsavel por gerenciar produtos na plataforma")
 public class ProdutoResource {
 
     @Autowired
@@ -24,73 +28,100 @@ public class ProdutoResource {
 
     @GetMapping(produces = "application/json")
     @Operation(
-            summary = "Listar produtos",
-            description = "Retorna todos os produtos paginados",
+            summary = "Endpoint para inserir um produto",
+            description = "A plataforma precisa disponibilizar um cadastro e produtos ....",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
+                    @ApiResponse(description = "Lista retornada com sucesso", responseCode = "200"),
+                    @ApiResponse(description = "Erro interno", responseCode = "500")
             }
     )
     public ResponseEntity<Page<ProdutoDTO>> produtos(Pageable pageable) {
-        return ResponseEntity.ok(produtoService.findAll(pageable));
-    }
 
-    @GetMapping("/{id}")
+        Page<ProdutoDTO> produtos = produtoService.findAll(pageable);
+        return ResponseEntity.ok().body(produtos);
+    };
+
+    @GetMapping(value = "/{id}",produces = "application/json")
     @Operation(
-            summary = "Buscar produto por ID",
-            description = "Retorna um produto específico",
+            summary = "Endpoint para inserir um produto",
+            description = "A plataforma precisa disponibilizar um cadastro e produtos ....",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Produto encontrado"),
-                    @ApiResponse(responseCode = "404", description = "Produto não encontrado")
+                    @ApiResponse(description = "Retorna a informação pesquisada por 10", responseCode = "200"),
+                    @ApiResponse(description = "Informação não encontrada", responseCode = "404")
             }
     )
-    public ResponseEntity<ProdutoDTO> produto(@PathVariable Long id) {
-        return ResponseEntity.ok(produtoService.findById(id));
+    public ResponseEntity<ProdutoDTO> produto(@PathVariable Long id){
+
+
+        ProdutoDTO dto = produtoService.findById(id);
+        return ResponseEntity.ok().body(dto);
     }
 
-    @PostMapping
+    @PostMapping(produces = "application/json")
     @Operation(
-            summary = "Cadastrar produto",
-            description = "Insere um novo produto",
+            summary = "Endpoint para inserir um produto",
+            description = "A plataforma precisa disponibilizar um cadastro e produtos ....",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Criado com sucesso"),
-                    @ApiResponse(responseCode = "400", description = "Erro na requisição")
+                    @ApiResponse(description = "Registro criado", responseCode = "201",content = {}),
+                    @ApiResponse(description = "Registro mal-feito", responseCode = "400"),
+                    @ApiResponse(description = "Não autorizado", responseCode = "401"),
+                    @ApiResponse(description = "Proibido no seu perfil", responseCode = "403"),
+                    @ApiResponse(description = "Erro ao processar", responseCode = "422"),
+                    @ApiResponse(description = "Erro interno no servidor", responseCode = "500")
             }
     )
-    public ResponseEntity<ProdutoDTO> insert(@RequestBody ProdutoDTO dto) {
+    public ResponseEntity<ProdutoDTO> insert(@RequestBody ProdutoDTO dto){
 
+        //inserindo mo BD e pegando o objeto inserido
         ProdutoDTO retorno = produtoService.insert(dto);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(retorno.getId())
-                .toUri();
+        //criando um link para acessar a produto criada
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(retorno.getId()).toUri();
 
+        //enviando a produto criada
         return ResponseEntity.created(location).body(retorno);
     }
 
     @DeleteMapping("/{id}")
     @Operation(
-            summary = "Deletar produto",
-            description = "Remove um produto",
+            summary = "Endpoint para apagar um produto",
+            description = "A plataforma precisa disponibilizar um cadastro e produtos ....",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Removido com sucesso")
+                    @ApiResponse(description = "Sucesso", responseCode = "204", content = {}),
+                    @ApiResponse(description = "Registro mal-feito", responseCode = "400"),
+                    @ApiResponse(description = "Não autorizado", responseCode = "401"),
+                    @ApiResponse(description = "Proibido no seu perfil", responseCode = "403"),
+                    @ApiResponse(description = "Não encontrado", responseCode = "404"),
+                    @ApiResponse(description = "Erro ao processar", responseCode = "422"),
+                    @ApiResponse(description = "Erro interno no servidor", responseCode = "500")
             }
     )
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+
+
         produtoService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
+
+    @PostMapping(value ="/{id}", produces = "application/json")
     @Operation(
-            summary = "Atualizar produto",
-            description = "Atualiza um produto",
+            summary = "Endpoint para atualizar um produto",
+            description = "A plataforma precisa disponibilizar um cadastro e produtos ....",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Atualizado com sucesso")
+                    @ApiResponse(description = "OK", responseCode = "200"),
+                    @ApiResponse(description = "Registro mal-feito", responseCode = "400"),
+                    @ApiResponse(description = "Não autorizado", responseCode = "401"),
+                    @ApiResponse(description = "Proibido no seu perfil", responseCode = "403"),
+                    @ApiResponse(description = "Não encontrado", responseCode = "404"),
+                    @ApiResponse(description = "Erro ao processar", responseCode = "422"),
+                    @ApiResponse(description = "Erro interno no servidor", responseCode = "500")
             }
     )
-    public ResponseEntity<ProdutoDTO> update(@PathVariable Long id, @RequestBody ProdutoDTO dto) {
-        return ResponseEntity.ok(produtoService.update(id, dto));
+    public ResponseEntity<ProdutoDTO> update(@PathVariable Long id, @RequestBody ProdutoDTO dto){
+
+        ProdutoDTO retorno = produtoService.update(id,dto);
+        return ResponseEntity.ok().body(retorno);
     }
+
 }

@@ -1,41 +1,52 @@
 package br.ifmg.produto1_2026.dto;
+
 import br.ifmg.produto1_2026.entities.Produto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProdutoDTO {
+public class ProdutoDTO extends RepresentationModel<ProdutoDTO> {
+
     @Schema(description = "identificador unico no sistema")
     private Long id;
     @Schema(description = "nome do produto")
     private String nome;
-    @Schema(description = "descrição do produto")
+    @Schema(description = "descrição detalhada do produto")
     private String descricao;
-    @Schema(description = "preço do produto")
-    private double preco;
-    @Schema(description = "url da imagem do do produto")
+    @Schema(description = "valor em reais do produto")
+    private Double preco;
+    @Schema(description = "endereço eletronico da imagem")
     private String imgUrl;
-    private List<CategoriaDTO> categoriasDTO = new ArrayList<CategoriaDTO>();
 
-    public ProdutoDTO() {}
+    @Schema(description = "Lista das categorias que o produto pertence")
+    private List<CategoriaDTO> categorias = new ArrayList<CategoriaDTO>();
 
-    public ProdutoDTO(Long id, String nome, String descricao, double preco, String imgUrl) {
+    public ProdutoDTO() {
+    }
+
+    public ProdutoDTO(Long id, String nome, String descricao, Double preco, String imgUrl) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
         this.imgUrl = imgUrl;
     }
-    public ProdutoDTO(Produto entity) {
-        this.id = entity.getId();
-        this.nome = entity.getNome();
-        this.descricao = entity.getDescricao();
-        this.preco = entity.getPreco();
-        this.imgUrl = entity.getImgUrl();
 
-        entity.getCategorias().forEach(cat -> this.categoriasDTO.add(new CategoriaDTO(cat)));
+    public ProdutoDTO(Produto produto ) {
+        this.id = produto.getId();
+        this.nome = produto.getNome();
+        this.descricao = produto.getDescricao();
+        this.preco = produto.getPreco();
+        this.imgUrl = produto.getImgUrl();
+
+        produto.getCategorias().forEach(cat->this.categorias.add(new CategoriaDTO(cat)));
     }
+
+    public ProdutoDTO(ProdutoDTO produtoDTO) {
+    }
+
     public Long getId() {
         return id;
     }
@@ -60,11 +71,11 @@ public class ProdutoDTO {
         this.descricao = descricao;
     }
 
-    public double getPreco() {
+    public Double getPreco() {
         return preco;
     }
 
-    public void setPreco(double preco) {
+    public void setPreco(Double preco) {
         this.preco = preco;
     }
 
@@ -76,12 +87,12 @@ public class ProdutoDTO {
         this.imgUrl = imgUrl;
     }
 
-    public List<CategoriaDTO> getCategoriasDTO() {
-        return categoriasDTO;
+    public List<CategoriaDTO> getCategorias() {
+        return categorias;
     }
 
-    public void setCategoriasDTO(List<CategoriaDTO> categoriasDTO) {
-        this.categoriasDTO = categoriasDTO;
+    public void setCategorias(List<CategoriaDTO> categorias) {
+        this.categorias = categorias;
     }
 
     @Override
