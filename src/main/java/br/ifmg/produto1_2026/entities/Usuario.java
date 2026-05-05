@@ -26,7 +26,7 @@ public class Usuario {
     @Column(name = "atualizado_em")
     private Instant atualizadoEm;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "tb_usuario_perfil",
             joinColumns = @JoinColumn(name = "id_usuario"),
@@ -44,6 +44,14 @@ public class Usuario {
         this.senha = senha;
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
+    }
+
+    public  void addRole(Perfil perfil) {
+        this.perfis.add(perfil);
+    }
+
+    public boolean hasRole(Perfil perfil) {
+        return this.perfis.contains(perfil);
     }
 
     @PrePersist

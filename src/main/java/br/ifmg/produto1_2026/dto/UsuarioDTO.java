@@ -1,6 +1,8 @@
 package br.ifmg.produto1_2026.dto;
 
 import br.ifmg.produto1_2026.entities.Usuario;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,19 +10,20 @@ import java.util.List;
 public class UsuarioDTO {
 
     private Long id;
+    @NotBlank(message = "Campo nome obrigatorio")
     private String nome;
     private String telefone;
+    @NotBlank(message = "Campo email obrigatorio")
+    @Email(message = "Email inválido.")
     private String email;
-    private String senha;
     private List<PerfilDTO> perfis = new ArrayList<>();
     public UsuarioDTO() {}
 
-    public UsuarioDTO(Long id, String nome, String telefone, String email, String senha) {
+    public UsuarioDTO(Long id, String nome, String telefone, String email) {
         this.id = id;
         this.nome = nome;
         this.telefone = telefone;
         this.email = email;
-        this.senha = senha;
     }
 
     public UsuarioDTO(Usuario entity) {
@@ -28,7 +31,6 @@ public class UsuarioDTO {
         this.nome = entity.getNome();
         this.telefone = entity.getTelefone();
         this.email = entity.getEmail();
-        this.senha = entity.getSenha();
 
         entity.getPerfis().forEach(role -> this.perfis.add(new PerfilDTO(role)));
     }
@@ -64,12 +66,12 @@ public class UsuarioDTO {
         this.email = email;
     }
 
-    public String getSenha() {
-        return senha;
+    public List<PerfilDTO> getPerfis() {
+        return perfis;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setPerfis(List<PerfilDTO> perfis) {
+        this.perfis = perfis;
     }
 
     @Override
