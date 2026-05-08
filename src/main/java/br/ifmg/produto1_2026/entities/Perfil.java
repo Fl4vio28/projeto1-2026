@@ -1,23 +1,27 @@
 package br.ifmg.produto1_2026.entities;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
+import java.time.Instant;
 import java.util.Objects;
 
+
 @Entity
-@Table(name = "tb_perfil")
-public class Perfil { //POJO
+@Table(name= "tb_perfil")
+public class Perfil implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome;
+    private String autoridade;
 
-    public Perfil() {}
+    public Perfil() {
+    }
 
-    public Perfil(Long id, String nome) {
+    public Perfil(String nome, Long id) {
+        this.autoridade = nome;
         this.id = id;
-        this.nome = nome;
     }
 
     public Long getId() {
@@ -29,31 +33,35 @@ public class Perfil { //POJO
     }
 
     public String getNome() {
-        return nome;
+        return autoridade;
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        this.autoridade = nome;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Perfil perfil = (Perfil) o;
-        return Objects.equals(id, perfil.id) && Objects.equals(nome, perfil.nome);
+        return Objects.equals(id, perfil.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nome);
+        return Objects.hashCode(id);
     }
 
     @Override
     public String toString() {
         return "Perfil{" +
                 "id=" + id +
-                ", nome='" + nome + '\'' +
+                ", nome='" + autoridade + '\'' +
                 '}';
     }
-}
 
+    @Override
+    public String getAuthority() {
+        return autoridade;
+    }
+}

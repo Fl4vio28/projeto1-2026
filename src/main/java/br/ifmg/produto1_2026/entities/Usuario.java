@@ -1,40 +1,39 @@
 package br.ifmg.produto1_2026.entities;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "tb_usuario")
-public class Usuario {
+public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nome;
     private String telefone;
     private String email;
     private String senha;
 
-    @Column(name = "criado_em")
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant criadoEm;
-
-    @Column(name = "atualizado_em")
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant atualizadoEm;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "tb_usuario_perfil",
+            name="tb_usuario_perfil",
             joinColumns = @JoinColumn(name = "id_usuario"),
             inverseJoinColumns = @JoinColumn(name = "id_perfil")
     )
-    private Set<Perfil> perfis = new HashSet<>();
+    private Set<Perfil> perfis = new HashSet<Perfil>();
 
-    public Usuario() {}
+    public Usuario() {
+    }
 
     public Usuario(Long id, String nome, String telefone, String email, String senha, Instant criadoEm, Instant atualizadoEm) {
         this.id = id;
@@ -44,25 +43,6 @@ public class Usuario {
         this.senha = senha;
         this.criadoEm = criadoEm;
         this.atualizadoEm = atualizadoEm;
-    }
-
-    public  void addRole(Perfil perfil) {
-        this.perfis.add(perfil);
-    }
-
-    public boolean hasRole(Perfil perfil) {
-        return this.perfis.contains(perfil);
-    }
-
-    @PrePersist
-    public void prePersist() {
-        this.criadoEm = Instant.now();
-        this.atualizadoEm = Instant.now();
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.atualizadoEm = Instant.now();
     }
 
     public Long getId() {
@@ -109,16 +89,8 @@ public class Usuario {
         return criadoEm;
     }
 
-    public void setCriadoEm(Instant criadoEm) {
-        this.criadoEm = criadoEm;
-    }
-
     public Instant getAtualizadoEm() {
         return atualizadoEm;
-    }
-
-    public void setAtualizadoEm(Instant atualizadoEm) {
-        this.atualizadoEm = atualizadoEm;
     }
 
     public Set<Perfil> getPerfis() {
@@ -129,16 +101,61 @@ public class Usuario {
         this.perfis = perfis;
     }
 
+    public void addRole(Perfil perfil) {
+        this.perfis.add(perfil);
+    }
+
+    public boolean hasRole(Perfil perfil) {
+        return this.perfis.contains(perfil);
+    }
+
+    @PrePersist
+    public void prePersist() {
+        this.criadoEm = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.atualizadoEm = Instant.now();
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Usuario)) return false;
-        Usuario that = (Usuario) o;
-        return Objects.equals(id, that.id);
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", telefone='" + telefone + '\'' +
+                ", email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                ", criadoEm=" + criadoEm +
+                ", atualizadoEm=" + atualizadoEm +
+                '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return perfis;
+    }
+
+    @Override
+    public String getPassword() {
+        return senha;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }
