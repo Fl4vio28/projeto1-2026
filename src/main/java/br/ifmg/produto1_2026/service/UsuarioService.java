@@ -133,6 +133,17 @@ public class UsuarioService implements UserDetailsService {
 
         Usuario usuario = new Usuario();
 
-        return null;
+        usuario.setSenha(dados.getFirst().getPassword());
+        usuario.setEmail(dados.getFirst().getUsername());
+
+        for(UserDetailsProjection dado:dados){
+            usuario.addRole(
+                    new Perfil(dado.getRoleId(),
+                            dado.getAuthority()
+                    )
+            );
+        }
+
+        return usuario;
     }
 }
