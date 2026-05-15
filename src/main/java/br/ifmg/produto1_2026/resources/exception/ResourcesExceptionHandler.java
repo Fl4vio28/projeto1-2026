@@ -54,10 +54,10 @@ public class ResourcesExceptionHandler {
         error.setPath(req.getRequestURI());
 
         for (FieldError field :
-                            e.getBindingResult().getFieldErrors()) {
-                    error.addFieldMessage(
-                            new FieldMessage(field.getField(),field.getDefaultMessage())
-                    );
+                e.getBindingResult().getFieldErrors()) {
+            error.addFieldMessage(
+                    new FieldMessage(field.getField(),field.getDefaultMessage())
+            );
         }
 
 

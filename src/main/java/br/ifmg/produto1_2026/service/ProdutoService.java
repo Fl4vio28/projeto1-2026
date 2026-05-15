@@ -7,8 +7,8 @@ import br.ifmg.produto1_2026.entities.Produto;
 import br.ifmg.produto1_2026.repositories.CategoriaRepository;
 import br.ifmg.produto1_2026.repositories.ProdutoRepository;
 import br.ifmg.produto1_2026.resources.ProdutoResource;
-import br.ifmg.produto1_2026.service.exepition.ErroNoBancoDeDados;
-import br.ifmg.produto1_2026.service.exepition.RegistroNaoEncontrado;
+import br.ifmg.produto1_2026.service.exception.ErroNoBancoDeDados;
+import br.ifmg.produto1_2026.service.exception.RegistroNaoEncontrado;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service

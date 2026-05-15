@@ -1,8 +1,8 @@
 package br.ifmg.produto1_2026.service;
 import br.ifmg.produto1_2026.dto.CategoriaDTO;
 import br.ifmg.produto1_2026.repositories.CategoriaRepository;
-import br.ifmg.produto1_2026.service.exepition.ErroNoBancoDeDados;
-import br.ifmg.produto1_2026.service.exepition.RegistroNaoEncontrado;
+import br.ifmg.produto1_2026.service.exception.ErroNoBancoDeDados;
+import br.ifmg.produto1_2026.service.exception.RegistroNaoEncontrado;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

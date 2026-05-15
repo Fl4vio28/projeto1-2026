@@ -1,7 +1,10 @@
-package br.ifmg.produto1_2026.resources.exeception;
+package br.ifmg.produto1_2026.resources.exception;
+
 import java.time.Instant;
 
 public class StandartError {
+
+
     private Instant timestamp;
     private Integer status;
     private String error;
@@ -11,10 +14,10 @@ public class StandartError {
     public StandartError() {
     }
 
-    public StandartError(String error, Instant timestamp, Integer status, String message, String path) {
-        this.error = error;
+    public StandartError(Instant timestamp, Integer status, String error, String message, String path) {
         this.timestamp = timestamp;
         this.status = status;
+        this.error = error;
         this.message = message;
         this.path = path;
     }
@@ -58,4 +61,5 @@ public class StandartError {
     public void setPath(String path) {
         this.path = path;
     }
+
 }
