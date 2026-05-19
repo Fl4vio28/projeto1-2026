@@ -17,10 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailResource {
     @Autowired
     private EmailService emailService;
-
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR', 'VENDEDOR', 'CLIENTE')")
     @PostMapping
     public ResponseEntity<Void> sendEmail(@Valid @RequestBody EmailDTO emailDTO) {
-
         emailService.sendMail(emailDTO);
         return ResponseEntity.noContent().build();
     }

@@ -7,80 +7,53 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/usuario")
-
 public class UsuarioResource {
 
     @Autowired
     private UsuarioService usuarioService;
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @GetMapping
-    public ResponseEntity<Page<UsuarioDTO>> usuarios(
-            /*
-            @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "10") Integer size,
-            @RequestParam(value = "direction", defaultValue = "ASC") String direction,
-            @RequestParam(value = "sort", defaultValue = "id") String sort
-            */
-
-            Pageable pageable
-
-
-
-    ) {
-
-
-        //PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), sort);
-
+    public ResponseEntity<Page<UsuarioDTO>> usuarios(Pageable pageable) {
         Page<UsuarioDTO> usuarios = usuarioService.findAll(pageable);
         return ResponseEntity.ok().body(usuarios);
-    };
+    }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> usuario(@PathVariable Long id){
-
-
+    public ResponseEntity<UsuarioDTO> usuario(@PathVariable Long id) {
         UsuarioDTO dto = usuarioService.findById(id);
         return ResponseEntity.ok().body(dto);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @PostMapping
-    public ResponseEntity<UsuarioDTO> insert(@RequestBody @Valid UsuarioInsertDTO dto){
-
-        //inserindo mo BD e pegando o objeto inserido
+    public ResponseEntity<UsuarioDTO> insert(@RequestBody @Valid UsuarioInsertDTO dto) {
         UsuarioDTO retorno = usuarioService.insert(dto);
-
-        //criando um link para acessar a produto criada
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(retorno.getId()).toUri();
-
-        //enviando a produto criada
         return ResponseEntity.created(location).body(retorno);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
-
-
-        usuarioService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> update(@PathVariable Long id, @RequestBody @Valid UsuarioInsertDTO dto){
-
-        UsuarioDTO retorno = usuarioService.update(id,dto);
+    public ResponseEntity<UsuarioDTO> update(@PathVariable Long id, @RequestBody @Valid UsuarioInsertDTO dto) {
+        UsuarioDTO retorno = usuarioService.update(id, dto);
         return ResponseEntity.ok().body(retorno);
     }
 
+    @PreAuthorize("hasAnyRole('ADMINISTRADOR')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        usuarioService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
