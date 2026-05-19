@@ -184,3 +184,5 @@ Caused by: org.springframework.util.PlaceholderResolutionException: Could not re
 2026-05-19 11:17:53.996 [main] INFO  b.i.p.Produto12026Application - Started Produto12026Application in 8.222 seconds (process running for 8.763)
 2026-05-19 11:17:53.999 [main] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
 2026-05-19 11:17:54.000 [main] WARN  o.s.c.events.SpringDocAppInitializer - SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-05-19 11:20:14.107 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-05-19 11:20:14.111 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
